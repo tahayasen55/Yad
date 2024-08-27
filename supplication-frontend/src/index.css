@@ -1,0 +1,20 @@
+
+*{
+  font-family: 'NRT' !important;
+
+}
+html {
+  font-family: 'NRT' !important;
+}
+@font-face {
+  font-family: 'NRT';
+  src: url('./assets/font/NRT-Reg.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+
+  font-family: 'NRT' !important;
+ 
+}

@@ -1,0 +1,48 @@
+
+
+*{
+  font-family: 'NRT' !important;
+
+}
+html {
+  font-family: 'NRT' !important;
+}
+@font-face {
+  font-family: 'NRT';
+  src: url('./assets/font/NRT-Reg.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+
+  font-family: 'NRT' !important;
+ 
+}
+
+.App {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+button {
+  margin-right: 5px;
+}
