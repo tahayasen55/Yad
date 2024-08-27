@@ -6,6 +6,10 @@ if (chrome && chrome.alarms && chrome.notifications) {
     switch (interval) {
       case 'every3s':
         return 3; // 3 seconds
+      case 'every1h':
+        return 1 * 60 * 60; // 1 hour
+      case 'every2h':
+        return 2 * 60 * 60; // 2 hours
       case 'every4h':
         return 4 * 60 * 60; // 4 hours
       case 'every8h':
@@ -75,7 +79,7 @@ if (chrome && chrome.alarms && chrome.notifications) {
     const options = {
       type: 'basic',
       iconUrl: './icons/icon.png',
-      title: 'Islamic Supplication',
+      title: 'یاد - أذكار',
       message: supplication.text,
       requireInteraction: true  // Keeps the notification until the user interacts
     };

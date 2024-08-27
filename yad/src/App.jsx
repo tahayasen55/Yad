@@ -30,7 +30,6 @@ const App = () => {
       chrome.runtime.sendMessage({ action: 'updateLanguage', language: newLanguage });
     });
   };
-  
 
   const handleFocusModeChange = () => {
     const newFocusMode = !focusMode;
@@ -42,10 +41,11 @@ const App = () => {
   const translations = {
     en: {
       title: 'Select Notification Interval',
-      intervalLabel: 'Set how often you want to receive notifications.',
       languageLabel: 'Select notification language.',
       focusModeLabel: 'Focus Mode',
       saveSettings: 'Save Settings',
+      every1h: 'Every 1 hour',  // New
+      every2h: 'Every 2 hours', // New
       every3s: 'Every 3 seconds',
       every4h: 'Every 4 hours',
       every8h: 'Every 8 hours',
@@ -56,10 +56,11 @@ const App = () => {
     },
     ku: {
       title: 'دیاری کردنی ماوەی ئاگاداری',
-      intervalLabel: 'دیاری بکە چەند جار دەتەوێت ئاگاداریدانەکان وەرگرن.',
       languageLabel: 'زمانی ئاگاداریدانەکان دیاری بکە.',
-      focusModeLabel: 'دۆخی سەرجەم',
+      focusModeLabel: 'دۆخی تەرکیزکردن',
       saveSettings: 'پاشەکەوتکردنی ڕێکخستنەکان',
+      every1h: 'هەموو ١ کاتژمێر',  // New
+      every2h: 'هەموو ٢ کاتژمێر',  // New
       every3s: 'هەموو ٣ چرکە',
       every4h: 'هەموو ٤ کاتژمێر',
       every8h: 'هەموو ٨ کاتژمێر',
@@ -70,10 +71,11 @@ const App = () => {
     },
     ar: {
       title: 'اختر فترة الإخطار',
-      intervalLabel: 'حدد كم مرة تريد تلقي الإشعارات.',
       languageLabel: 'اختر لغة الإشعارات.',
       focusModeLabel: 'وضع التركيز',
       saveSettings: 'حفظ الإعدادات',
+      every1h: 'كل ساعة',  // New
+      every2h: 'كل ساعتين', // New
       every3s: 'كل ٣ ثواني',
       every4h: 'كل ٤ ساعات',
       every8h: 'كل ٨ ساعات',
@@ -88,9 +90,8 @@ const App = () => {
     <div className="app-container">
       <div className="content">
         <h2>{translations[language].title}</h2>
-        <p>{translations[language].intervalLabel}</p>
         <div className="interval-options">
-          {['every3s', 'every4h', 'every8h', 'every12h', 'every16h', 'every20h', 'every24h'].map((option) => (
+          {['every3s', 'every1h', 'every2h', 'every4h', 'every8h', 'every12h', 'every16h', 'every20h', 'every24h'].map((option) => (
             <button
               key={option}
               className={`interval-button ${interval === option ? 'selected' : ''}`}
@@ -129,6 +130,8 @@ const App = () => {
             <input type="checkbox" checked={focusMode} onChange={handleFocusModeChange} />
             <span className="slider round"></span>
           </label>
+          {focusMode && <span className="zzz-icon ">💤</span>} 
+
         </div>
 
         <button className="save-button">

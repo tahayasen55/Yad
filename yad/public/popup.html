@@ -3,179 +3,180 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>دووایەتی ئیسلامی</title>
+  <title>یاد - أذكار</title>
   <style>
-@font-face {
-  font-family: 'Speda';
-  src: url('./assets/fonts/Speda.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
+    @font-face {
+      font-family: 'Speda';
+      src: url('./fonts/Speda.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
 
-@font-face {
-  font-family: 'Hafs';
-  src: url('./assets/fonts/Hafs.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
+    @font-face {
+      font-family: 'Hafs';
+      src: url('./fonts/Hafs.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+  
+    body {
+      font-family: 'Speda', sans-serif;
+      text-align: center;
+      padding: 0;
+      margin: 0;
+      color: #084c41;
+      direction: rtl;
+      display: flex;
+      flex-direction: column; /* Changed to column to stack elements vertically */
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      min-width: 500px;
+      min-height: 400px;
+      background-color: #f0f9f7; /* Light teal background */
+      position: relative; /* To allow for the background image overlay */
+      overflow: hidden; /* To prevent background image overflow */
+    }
 
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('./assets/3893666_81805.jpg'); /* Your background image */
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0.7; /* Adjust opacity for a subtle background effect */
+      z-index: 1; /* Behind all content */
+    }
 
+    .supplication-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90%;
+      max-width: 600px;
+      padding: 30px;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(15, 118, 110, 0.2);
+      min-height: 420px;
+      position: relative;
+      z-index: 2; /* Ensure content is above the background image */
+      overflow: hidden; /* Prevent pattern overflow */
+    }
 
-body {
-  font-family: 'Speda', sans-serif;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-  color: #084c41;
-  direction: rtl;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  min-width: 500px;
-  min-height: 400px;
-  background-color: #f0f9f7; /* Light teal background */
-  position: relative; /* To allow for the background image overlay */
-  overflow: hidden; /* To prevent background image overflow */
-}
+    .supplication-type {
+      font-size: 14px;
+      color: #666;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: #e6fffa;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
 
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('./assets/3893666_81805.jpg'); /* Your background image */
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.7; /* Adjust opacity for a subtle background effect */
-  z-index: 1; /* Behind all content */
-}
+    .supplication-text {
+      font-family: 'Hafs', sans-serif;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #0f766e;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(15, 118, 110, 0.15);
+      border: 1px solid #ddd;
+      max-width: 500px;
+      text-align: center;
+      line-height: 1.6;
+    }
 
-.supplication-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 90%;
-  max-width: 600px;
-  padding: 30px;
-  background-color: rgba(255, 255, 255, 0.95);
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(15, 118, 110, 0.2);
-  min-height: 420px;
-  position: relative;
-  z-index: 2; /* Ensure content is above the background image */
-  overflow: hidden; /* Prevent pattern overflow */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+      width: 100%;
+      border-bottom: 2px solid #0f766e;
+    }
 
-}
+    .tab {
+      padding: 10px 15px;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      border-bottom: none;
+      margin-left: 5px;
+      background-color: #e6fffa;
+      color: #0f766e;
+      flex-grow: 1;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
 
+    .tab:hover {
+      background-color: #99e6e6;
+    }
 
-.supplication-type {
-  font-size: 14px;
-  color: #666;
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: #e6fffa;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-weight: bold;
-}
+    .tab.active {
+      background-color: #0f766e;
+      color: #ffffff;
+    }
 
-.supplication-text {
-  font-family: 'Hafs', sans-serif;
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #0f766e;
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(15, 118, 110, 0.15);
-  border: 1px solid #ddd;
-  max-width: 500px;
-  text-align: center;
-  line-height: 1.6;
-}
+    .tab-content {
+      font-family: 'Hafs', sans-serif;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      display: none;
+      width: 100%;
+      background-color: #ffffff;
+    }
 
-.tabs {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
-  width: 100%;
-  border-bottom: 2px solid #0f766e;
-}
+    .tab-content.active {
+      display: block;
+    }
 
-.tab {
-  padding: 10px 15px;
-  cursor: pointer;
-  border: 1px solid #ddd;
-  border-bottom: none;
-  margin-left: 5px;
-  background-color: #e6fffa;
-  color: #0f766e;
-  flex-grow: 1;
-  text-align: center;
-  transition: all 0.3s ease;
-}
+    h3 {
+      font-family: 'speda';
+      color: #0f766e;
+      background-color: #e6fffa;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(15, 118, 110, 0.2);
+      border: 1px solid #0f766e;
+      position: relative;
+      z-index: 2; /* Ensure h3 is above the background image */
+      margin-bottom: 5px;
+      margin-top: -22px;
 
-.tab:hover {
-  background-color: #99e6e6;
-}
-
-.tab.active {
-  background-color: #0f766e;
-  color: #ffffff;
-}
-
-.tab-content {
-  font-family: 'Hafs', sans-serif;
-  font-size: 14px;
-  border: 1px solid #ddd;
-  padding: 10px;
-  display: none;
-  width: 100%;
-  background-color: #ffffff;
-}
-
-.tab-content.active {
-  display: block;
-}
-
-h1 {
-  font-family: 'Speda', serif;
-  color: #0f766e;
-  margin-bottom: 20px;
-  background-color: #e6fffa;
-  padding: 10px 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(15, 118, 110, 0.2);
-  border: 1px solid #0f766e;
-}
-
-.kurdishTab {
-  font-family: 'Speda', sans-serif;
-}
-
-.englishTab {
-  font-family: 'Arial', sans-serif;
-}
-
-.arabicTab {
-  font-family: 'Hafs', sans-serif;
-  font-weight: 600;
-  line-height: 1.5;
-}
+    }
 
 
+    .kurdishTab {
+      font-family: 'Speda', sans-serif;
+    }
+
+    .englishTab {
+      font-family: 'Arial', sans-serif;
+    }
+
+    .arabicTab {
+      font-family: 'Hafs', sans-serif;
+      font-weight: 600;
+      line-height: 1.5;
+    }
   </style>
 </head>
 <body>
+  <h3 id="title" class="tee"></h3> 
+
   <div class="supplication-container">
     <div id="supplication-type" class="supplication-type">زیکر</div>
-    <h1 id="title">دووایەتی ئیسلامی</h1> <!-- Added id for dynamic title update -->
     <div id="supplication-text" class="supplication-text">بارەکەدانەوە...</div> 
 
     <div class="tabs">

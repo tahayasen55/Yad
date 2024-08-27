@@ -36,7 +36,7 @@ const SupplicationList = ({ supplications, onDelete, onEdit }) => {
 
   return (
     <div className="container-fluid my-4" dir="rtl"> {/* Changed to container-fluid for more width */}
-      <h2 className="text-center mb-4">لیستی داواکردنەکان</h2>
+      <h2 className="text-center mb-4">لیستی دەقەکان</h2>
       <div className="mb-3">
         <input
           type="text"

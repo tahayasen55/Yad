@@ -81,7 +81,7 @@ const SupplicationForm = ({ currentSupplication, onSave, onCancel }) => {
             <option value="zikr">زیکر</option>
             <option value="hadith">حدیث</option>
             <option value="aya">ئایە</option>
-            <option value="Fiqh">فیقهی</option>
+            <option value="fiqh">فیقهی</option>
           </select>
         </div>
         <div className="mb-3">
@@ -114,12 +114,15 @@ const SupplicationForm = ({ currentSupplication, onSave, onCancel }) => {
             onChange={handleChange}
           />
         </div>
-        <button type="submit" className="btn btn-success m-2" style={{marginLeft:"5px"}}>
+        <div className='text-center'>
+        <button type="submit" className="btn btn-success m-2" >
           {currentSupplication ? 'نوێکردنەوە' : 'زیادکردن'}
         </button>
-        <button type="button" className="btn btn-secondary" onClick={onCancel}>
+        <button type="button" className="btn btn-secondary m-2" onClick={onCancel}>
           پاشگەزبوونەوە
         </button>
+        </div>
+
       </form>
       <ToastContainer 
         position="top-right"

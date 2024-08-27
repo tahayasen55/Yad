@@ -47,16 +47,21 @@ function updateTypeDisplay(type, language) {
       zikr: 'Supplication',
       hadith: 'Hadith',
       aya: 'Verse',
+      fiqh: 'Jurisprudence',
     },
     ku: {
       zikr: 'زیکر',
       hadith: 'حدیث',
       aya: 'ئایە',
+      fiqh: 'فیقهی',
+
     },
     ar: {
       zikr: 'ذكر',
       hadith: 'حديث',
       aya: 'آية',
+      fiqh: 'الفقه',
+
     },
   };
 
@@ -81,9 +86,9 @@ function setActiveTab(language) {
 
 function updateTitle(language) {
   const titleTranslations = {
-    en: 'Islamic Supplication',
-    ku: 'دووایەتی ئیسلامی',
-    ar: 'الدعاء الإسلامي',
+    en: 'And whoever turns away from My remembrance will have a miserable life.',
+    ku: 'وە ھەرکەسێک ڕوو وەرگێرێت لەیادی من ئەوە گوزەرانێکی تەنگی دەبێت',
+    ar: 'وَمَنْ أَعْرَضَ عَن ذِكْرِي فَإِنَّ لَهُ مَعِيشَةً ضَنكًا',
   };
 
   const translatedTitle = titleTranslations[language] || titleTranslations.ku;
