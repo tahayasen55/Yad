@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './style.css';
 
 const SupplicationForm = ({ currentSupplication, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
     text: '',
-    type: 'zikr', // Default to 'zikr'
+    type: 'zikr',
     description: { kurdish: '', arabic: '', english: '' },
   });
 
@@ -32,32 +33,36 @@ const SupplicationForm = ({ currentSupplication, onSave, onCancel }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validation
     if (!formData.text || !formData.type) {
+      toast.dismiss(); // Dismiss any existing toasts
       toast.error('تکایە هەموو خانەکان پڕ بکەوە');
       return;
     }
 
     onSave(formData);
-    toast.success(currentSupplication ? 'داواکردنەکە نوێکرایەوە' : 'داواکردنە نوێەکە زیادکرا');
-    setFormData({
-      text: '',
-      type: 'zikr', // Reset to default 'zikr' after saving
-      description: { kurdish: '', arabic: '', english: '' },
+    toast.dismiss(); // Dismiss any existing toasts
+    toast.success(currentSupplication ? 'داواکردنەکە نوێکرایەوە' : 'داواکردنە نوێەکە زیادکرا', {
+      onClose: () => {
+        setFormData({
+          text: '',
+          type: 'zikr',
+          description: { kurdish: '', arabic: '', english: '' },
+        });
+      }
     });
   };
 
   return (
     <div className="container my-4" dir="rtl">
       <h2 className="text-center mb-4">
-        {currentSupplication ? 'دەستکاریکردنی داواکردن' : 'زیادکردنی داواکردنی نوێ'}
+        {currentSupplication ? 'دەستکاریکردنی دەق' : 'زیادکردنی دەقی نوێ'}
       </h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label className="form-label">دەق:</label>
-          <input
+          <label className="form-label ">دەق:</label>
+          <textarea
             type="text"
-            className="form-control"
+            className="form-control custom-font"
             name="text"
             value={formData.text}
             onChange={handleChange}
@@ -76,10 +81,11 @@ const SupplicationForm = ({ currentSupplication, onSave, onCancel }) => {
             <option value="zikr">زیکر</option>
             <option value="hadith">حدیث</option>
             <option value="aya">ئایە</option>
+            <option value="Fiqh">فیقهی</option>
           </select>
         </div>
         <div className="mb-3">
-          <label className="form-label">پەسنی کوردی:</label>
+          <label className="form-label">ڕونکردنەوەی کوردی:</label>
           <textarea
             type="text"
             className="form-control"
@@ -89,17 +95,17 @@ const SupplicationForm = ({ currentSupplication, onSave, onCancel }) => {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">پەسنی عەرەبی:</label>
+          <label className="form-label">ڕونکردنەوەی عەرەبی:</label>
           <textarea
             type="text"
-            className="form-control"
+            className="form-control custom-font"
             name="description.arabic"
             value={formData.description.arabic}
             onChange={handleChange}
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">پەسنی ئینگلیزی:</label>
+          <label className="form-label">ڕونکردنەوەی ئینگلیزی:</label>
           <textarea
             type="text"
             className="form-control"
@@ -108,14 +114,25 @@ const SupplicationForm = ({ currentSupplication, onSave, onCancel }) => {
             onChange={handleChange}
           />
         </div>
-        <button type="submit" className="btn btn-success me-2">
+        <button type="submit" className="btn btn-success m-2" style={{marginLeft:"5px"}}>
           {currentSupplication ? 'نوێکردنەوە' : 'زیادکردن'}
         </button>
         <button type="button" className="btn btn-secondary" onClick={onCancel}>
           پاشگەزبوونەوە
         </button>
       </form>
-      <ToastContainer /> {/* Add ToastContainer for notifications */}
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={true}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        limit={1}
+      />
     </div>
   );
 };

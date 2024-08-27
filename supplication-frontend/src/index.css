@@ -13,6 +13,15 @@ html {
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Hafs';
+  src: url('./assets/font/Hafs.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+.custom-font {
+  font-family: 'Hafs', Arial, sans-serif !important;
+}
 body {
 
   font-family: 'NRT' !important;
