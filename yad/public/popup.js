@@ -1,31 +1,36 @@
-/* global chrome */ // Inform ESLint that 'chrome' is a global variable
+/* global chrome */ 
 
 document.addEventListener('DOMContentLoaded', function () {
+  console.log('Popup DOM fully loaded and parsed.');
+
   chrome.runtime.sendMessage({ action: 'getSupplication' }, function (response) {
     if (response && response.supplication) {
       const { text, type, description } = response.supplication;
 
-      chrome.storage.sync.get(['language'], (result) => {
-        const language = result.language || 'kurdish';
+      console.log('Supplication data received:', response.supplication);
 
-        // Update the text and type in the popup
-        document.getElementById('supplication-text').textContent = text;
-        updateTypeDisplay(type, language);
+      // Ensure elements exist before attempting to update them
+      const supplicationTextElement = document.getElementById('supplication-text');
+      const supplicationTypeElement = document.getElementById('supplication-type');
+      
+      if (supplicationTextElement && supplicationTypeElement) {
+        supplicationTextElement.textContent = text || 'No supplication text available.';
+        updateTypeDisplay(type, 'ku');  // Assuming 'ku' for Kurdish; adjust based on default language
 
-        // Update the descriptions in the respective tabs
-        document.getElementById('description-kurdish').textContent = description.kurdish || 'No Kurdish description available.';
-        document.getElementById('description-arabic').textContent = description.arabic || 'No Arabic description available.';
-        document.getElementById('description-english').textContent = description.english || 'No English description available.';
+        // Update the description fields
+        document.getElementById('description-kurdish').textContent = description?.kurdish || 'No Kurdish description available.';
+        document.getElementById('description-arabic').textContent = description?.arabic || 'No Arabic description available.';
+        document.getElementById('description-english').textContent = description?.english || 'No English description available.';
 
-        // Set the active tab based on the selected language
-        setActiveTab(language);
+        setActiveTab('ku');  // Default to Kurdish
+        updateTitle('ku');
+      } else {
+        console.error('Required elements not found in the DOM.');
+      }
 
-        // Update the title based on the selected language
-        updateTitle(language);
-      });
     } else {
+      console.error('Error fetching supplication:', response?.error || 'No response from background script');
       document.getElementById('supplication-text').textContent = 'Error loading supplication.';
-      console.error('Error fetching supplication:', response.error);
     }
   });
 
@@ -54,18 +59,16 @@ function updateTypeDisplay(type, language) {
       hadith: 'حدیث',
       aya: 'ئایە',
       fiqh: 'فیقهی',
-
     },
     ar: {
       zikr: 'ذكر',
       hadith: 'حديث',
       aya: 'آية',
       fiqh: 'الفقه',
-
     },
   };
 
-  const translatedType = typeTranslations[language][type] || type;
+  const translatedType = typeTranslations[language]?.[type] || type || 'Unknown';
   document.getElementById('supplication-type').textContent = translatedType;
 }
 

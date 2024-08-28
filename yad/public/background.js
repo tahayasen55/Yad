@@ -1,53 +1,42 @@
 /* global chrome */ // Inform ESLint that 'chrome' is a global variable
 
 if (chrome && chrome.alarms && chrome.notifications) {
-  // Function to map interval strings to seconds
   function getIntervalInSeconds(interval) {
     switch (interval) {
-      case 'every3s':
-        return 3; // 3 seconds
-      case 'every1h':
-        return 1 * 60 * 60; // 1 hour
-      case 'every2h':
-        return 2 * 60 * 60; // 2 hours
-      case 'every4h':
-        return 4 * 60 * 60; // 4 hours
-      case 'every8h':
-        return 8 * 60 * 60; // 8 hours
-      case 'every12h':
-        return 12 * 60 * 60; // 12 hours
-      case 'every16h':
-        return 16 * 60 * 60; // 16 hours
-      case 'every20h':
-        return 20 * 60 * 60; // 20 hours
-      case 'every24h':
-        return 24 * 60 * 60; // 24 hours
+      case 'every3s': return 3; 
+      case 'every1h': return 3600; 
+      case 'every2h': return 7200; 
+      case 'every4h': return 14400; 
+      case 'every8h': return 28800; 
+      case 'every12h': return 43200; 
+      case 'every16h': return 57600; 
+      case 'every20h': return 72000; 
+      case 'every24h': return 86400; 
       default:
         console.error('Invalid interval:', interval);
-        return null; // Return null if the interval is invalid
+        return null; 
     }
   }
 
   function scheduleNotification(intervalInSeconds) {
-    if (intervalInSeconds === null || isNaN(intervalInSeconds) || !isFinite(intervalInSeconds) || intervalInSeconds <= 0) {
+    if (!intervalInSeconds || intervalInSeconds <= 0) {
       console.error('Invalid intervalInSeconds:', intervalInSeconds);
-      return; // Exit the function if the interval is invalid
+      return; 
     }
 
-    const intervalInMilliseconds = intervalInSeconds * 1000; // Convert seconds to milliseconds
+    const intervalInMinutes = intervalInSeconds / 60; 
 
     chrome.alarms.clearAll();
     chrome.alarms.create('supplicationNotification', {
-      delayInMinutes: intervalInMilliseconds / (60 * 1000),  // Convert to minutes
-      periodInMinutes: intervalInMilliseconds / (60 * 1000)  // Repeat every 'intervalInMilliseconds'
+      delayInMinutes: intervalInMinutes,
+      periodInMinutes: intervalInMinutes
     });
   }
 
   chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === 'supplicationNotification') {
-      // Check if Focus Mode is active before showing the notification
       chrome.storage.sync.get(['focusMode'], (result) => {
-        if (!result.focusMode) {  // Only show notifications if Focus Mode is NOT enabled
+        if (!result.focusMode) {
           showNotification();
         } else {
           console.log('Focus Mode is enabled, notification suppressed.');
@@ -59,57 +48,78 @@ if (chrome && chrome.alarms && chrome.notifications) {
   async function fetchRandomSupplication() {
     try {
       const response = await fetch('http://localhost:5000/api/supplications/random');
+      if (!response.ok) {
+        console.warn('API fetch failed; using local JSON.');
+        return await fetchLocalSupplication();
+      }
       const data = await response.json();
-      if (response.ok && data.text) {
+      if (data && data.text) {
         return data;
       } else {
-        console.error('Failed to fetch supplication:', data.message || 'Unknown error');
-        return null;
+        console.warn('Invalid data from API; using local JSON.');
+        return await fetchLocalSupplication();
       }
     } catch (error) {
-      console.error('Error fetching supplication:', error);
-      return null;
+      console.warn('Error fetching from API, using local JSON:', error);
+      return await fetchLocalSupplication();
     }
   }
 
+  async function fetchLocalSupplication() {
+    try {
+      const response = await fetch(chrome.runtime.getURL('supplications.json')); // Ensure local JSON is correctly referenced
+      const data = await response.json();
+      if (data && data.supplications.length > 0) {
+        const randomIndex = Math.floor(Math.random() * data.supplications.length);
+        return data.supplications[randomIndex];
+      } else {
+        console.error('Local supplications data is not structured properly:', data);
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching supplication from local JSON:', error);
+      return null;
+    }
+  }
+  
+
   async function showNotification() {
     const supplication = await fetchRandomSupplication();
-    if (!supplication) return;  // Exit if fetching failed
+    if (!supplication) {
+      console.error('No supplication available to show.');
+      return;
+    }
 
     const options = {
       type: 'basic',
       iconUrl: './icons/icon.png',
       title: 'یاد - أذكار',
       message: supplication.text,
-      requireInteraction: true  // Keeps the notification until the user interacts
+      requireInteraction: true 
     };
 
-    if (chrome.notifications.create) {
-      chrome.notifications.create('supplicationNotification', options);
-    } else {
-      console.error('chrome.notifications API is not available.');
-    }
+    chrome.notifications.create('supplicationNotification', options);
   }
 
-  // Add listener for notification click event
   chrome.notifications.onClicked.addListener((notificationId) => {
     if (notificationId === 'supplicationNotification') {
-      openPopup();
+      chrome.storage.local.get(['lastSupplication'], function(result) {
+        openPopup(result.lastSupplication);
+      });
     }
   });
 
   function openPopup() {
     const width = 700;
     const height = 600;
-  
-    chrome.system.display.getInfo(function(displays) {
-      // Use the first display's bounds
+
+    chrome.system.display.getInfo(function (displays) {
       const display = displays[0];
       const left = Math.round((display.bounds.width - width) / 2);
       const top = Math.round((display.bounds.height - height) / 2);
-  
+
       chrome.windows.create({
-        url: 'popup.html',
+        url: 'popup.html', // Ensure correct path for popup
         type: 'popup',
         width: width,
         height: height,
@@ -120,12 +130,12 @@ if (chrome && chrome.alarms && chrome.notifications) {
   }
 
   chrome.runtime.onInstalled.addListener(() => {
-    const interval = 'every3s'; // Default interval for testing
+    const interval = 'every3s'; 
     const intervalInSeconds = getIntervalInSeconds(interval);
     scheduleNotification(intervalInSeconds);
   });
 
-  chrome.storage.onChanged.addListener((changes) => { // Removed 'namespace' to resolve unused var error
+  chrome.storage.onChanged.addListener((changes) => {
     if (changes.interval) {
       const newInterval = changes.interval.newValue;
       const intervalInSeconds = getIntervalInSeconds(newInterval);
@@ -134,16 +144,14 @@ if (chrome && chrome.alarms && chrome.notifications) {
       }
     }
 
-    // Check for changes in focus mode status
     if (changes.focusMode) {
       const isFocusModeEnabled = changes.focusMode.newValue;
       if (isFocusModeEnabled) {
-        chrome.alarms.clearAll(); // Clear all alarms when Focus Mode is enabled
+        chrome.alarms.clearAll();
         console.log('Focus Mode enabled, notifications paused.');
       } else {
-        // Reschedule notifications when Focus Mode is disabled
         chrome.storage.sync.get(['interval'], (result) => {
-          const newInterval = result.interval || 'every4h'; // Fallback to default 'every4h' if not set
+          const newInterval = result.interval || 'every4h';
           const intervalInSeconds = getIntervalInSeconds(newInterval);
           if (intervalInSeconds !== null) {
             scheduleNotification(intervalInSeconds);
@@ -154,18 +162,23 @@ if (chrome && chrome.alarms && chrome.notifications) {
     }
   });
 
-  // Handle messages from popup or other parts of the extension
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'getSupplication') {
       fetchRandomSupplication().then(supplication => {
-        sendResponse({ supplication });
+        if (supplication) {
+          console.log('Sending supplication data to popup:', supplication); // Log data
+          sendResponse({ supplication });
+        } else {
+          sendResponse({ error: 'Failed to fetch supplication' });
+        }
       }).catch(error => {
         console.error('Error fetching supplication for popup:', error);
         sendResponse({ error: 'Failed to fetch supplication' });
       });
-      return true; // Indicate that the response is asynchronous
+      return true; // Required to keep the messaging channel open for asynchronous responses
     }
   });
+  
 } else {
   console.error('Chrome alarms or notifications API is not available.');
 }

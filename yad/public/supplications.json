@@ -1,0 +1,32 @@
+{
+    "supplications": [
+      {
+        "text": "نص الدعاء باللغة العربية",
+        "type": "zikr",
+        "description": {
+          "kurdish": "دعاء باللغة الكردية",
+          "arabic": "نص الدعاء باللغة العربية",
+          "english": "Supplication text in English"
+        }
+      },
+      {
+        "text":"نص الدعاء باللغة العربية",
+        "type": "aya",
+        "description": {
+          "kurdish": "دعاء المساء باللغة الكردية",
+          "arabic": "دعاء المساء باللغة العربية",
+          "english": "Evening supplication text in English"
+        }
+      },
+      {
+        "text": "نص الدعاء باللغة العربية",
+        "type": "fiqh",
+        "description": {
+          "kurdish": "الدعاء قبل النوم باللغة الكردية",
+          "arabic": "الدعاء قبل النوم باللغة العربية",
+          "english": "Supplication before sleep in English"
+        }
+      }
+    ]
+  }
+  
